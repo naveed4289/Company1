@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PasswordResetController;
 use App\Http\Controllers\EmailVerificationController; 
 use App\Http\Controllers\CompanyInvitationController;
+use App\Http\Controllers\ChannelController;
 
 Route::post('/register', [AuthController::class, 'register']);        
 Route::post('/login', [AuthController::class, 'login']);              
@@ -24,6 +25,15 @@ Route::middleware(App\Http\Middleware\AuthToken::class)->group(function () {
     Route::post('/company/invite', [AuthController::class, 'sendInvitation']);
     Route::delete('/company/employee', [CompanyInvitationController::class, 'removeEmployee']);
     Route::get('/company/data', [CompanyInvitationController::class, 'getCompanyData']);
+    
+    // Channel management routes - Only 3 required endpoints
+    Route::post('/channels', [ChannelController::class, 'store']); // Create channel
+    
+    // Routes that require channel ownership (creator or company owner)
+    Route::middleware(App\Http\Middleware\ChannelOwnerMiddleware::class)->group(function () {
+        Route::patch('/channels/{id}', [ChannelController::class, 'update']);  // Update channel
+        Route::delete('/channels/{id}', [ChannelController::class, 'destroy']); // Remove channel
+    });
 });
 
 // Public routes

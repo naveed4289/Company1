@@ -56,4 +56,9 @@ public function companies()
 {
     return $this->belongsToMany(Company::class, 'company_user');
 }
+
+public function createdChannels()
+{
+    return $this->hasMany(Channel::class, 'created_by');
+}
 }

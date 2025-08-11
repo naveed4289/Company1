@@ -24,4 +24,9 @@ public function invitations()
 {
     return $this->hasMany(CompanyInvitation::class);
 }
+
+public function channels()
+{
+    return $this->hasMany(Channel::class);
+}
 }
