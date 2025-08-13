@@ -4,7 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable; 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
@@ -19,11 +19,11 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'first_name',
-    'last_name',
-    'email',
-    'password',
-    'is_auto_created',
-    'email_verified_at',
+        'last_name',
+        'email',
+        'password',
+        'is_auto_created',
+        'email_verified_at',
     ];
 
     /**
@@ -49,26 +49,26 @@ class User extends Authenticatable
         ];
     }
     public function company()
-{
-    return $this->hasOne(Company::class);
-}
-public function companies()
-{
-    return $this->belongsToMany(Company::class, 'company_user');
-}
+    {
+        return $this->hasOne(Company::class);
+    }
+    public function companies()
+    {
+        return $this->belongsToMany(Company::class, 'company_user');
+    }
 
-public function createdChannels()
-{
-    return $this->hasMany(Channel::class, 'created_by');
-}
+    public function createdChannels()
+    {
+        return $this->hasMany(Channel::class, 'created_by');
+    }
 
-public function messages()
-{
-    return $this->hasMany(Message::class);
-}
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 
-public function channelMemberships()
-{
-    return $this->belongsToMany(Channel::class, 'channel_members');
-}
+    public function channelMemberships()
+    {
+        return $this->belongsToMany(Channel::class, 'channel_members');
+    }
 }

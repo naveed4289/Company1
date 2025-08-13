@@ -4,36 +4,48 @@
 You have been invited to join **{{ $companyName }}** as an employee.
 
 @if($hasGeneratedPassword)
-## Your Account Details
+## 🎉 Welcome! Your Account Has Been Created
 
-We've created an account for you with the following login details:
+We've automatically created an account for you with the following login details:
 
-**Email:** {{ $email }}  
-**Password:** {{ $password }}
+@component('mail::panel')
+**Login Email:** {{ $email }}  
+**Temporary Password:** `{{ $password }}`
+@endcomponent
 
-⚠️ **Important:** Please change your password after your first login for security.
+⚠️ **Security Notice:** Please change this temporary password after your first login.
 
 ## Next Steps
 
-1. Click the button below to accept the invitation
-2. Use the login details above to access your account
-3. Change your password in your profile settings
+1. **Accept the invitation** by clicking the button below
+2. **Login to the system** using the credentials above  
+3. **Change your password** in your profile settings for security
 
 @else
 ## Next Steps
 
-Click the button below to accept the invitation and join the company:
+You already have an account with us. Simply click the button below to accept the invitation and join the company:
 
 @endif
 
 @component('mail::button', ['url' => $acceptUrl])
-Accept Invitation
+Accept Invitation & Join {{ $companyName }}
 @endcomponent
 
 @if($hasGeneratedPassword)
-After accepting the invitation, you can login to the system using the credentials provided above.
+---
+
+**Quick Login Summary:**
+- Email: {{ $email }}
+- Password: {{ $password }}
+- After accepting, login at: {{ url('/login') }}
+
+@else
+After accepting the invitation, you can login using your existing account credentials.
 @endif
 
+If you have any questions, please contact your company administrator.
+
 Thanks,<br>
-{{ config('app.name') }}
+{{ config('app.name') }} Team
 @endcomponent

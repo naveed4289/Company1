@@ -31,6 +31,11 @@ class Message extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function attachments()
+    {
+        return $this->hasMany(MessageAttachment::class);
+    }
+
     /**
      * Scope for messages in a specific channel
      */
