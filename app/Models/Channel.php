@@ -92,4 +92,69 @@ class Channel extends Model
     {
         return $query->where('company_id', $companyId);
     }
+
+    /**
+     * Get all messages for this channel
+     */
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
+
+    /**
+     * Get members of this channel (for private channels)
+     */
+    public function members()
+    {
+        return $this->belongsToMany(User::class, 'channel_members');
+    }
+
+    /**
+     * Check if a user is a member of this channel
+     */
+    public function hasMember($user)
+    {
+        return $this->members()->where('user_id', $user->id)->exists();
+    }
+
+    /**
+     * Add a member to this channel
+     */
+    public function addMember($user)
+    {
+        if (!$this->hasMember($user)) {
+            $this->members()->attach($user->id);
+        }
+    }
+
+    /**
+     * Remove a member from this channel
+     */
+    public function removeMember($user)
+    {
+        $this->members()->detach($user->id);
+    }
+
+    /**
+     * Check if user can access this channel
+     */
+    public function canUserAccess($user)
+    {
+        // Check if user belongs to the same company
+        if (!$this->isUserInSameCompany($user)) {
+            return false;
+        }
+
+        // Public channels - all company members can access
+        if ($this->type === 'public') {
+            return true;
+        }
+
+        // Private channels - only members can access
+        if ($this->type === 'private') {
+            return $this->hasMember($user);
+        }
+
+        return false;
+    }
 }

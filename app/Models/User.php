@@ -61,4 +61,14 @@ public function createdChannels()
 {
     return $this->hasMany(Channel::class, 'created_by');
 }
+
+public function messages()
+{
+    return $this->hasMany(Message::class);
+}
+
+public function channelMemberships()
+{
+    return $this->belongsToMany(Channel::class, 'channel_members');
+}
 }
