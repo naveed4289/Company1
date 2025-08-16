@@ -15,7 +15,7 @@ class ChannelController extends Controller
     /**
      * Get all channels for user's company
      */
-    public function get(Request $request)
+    public function getChannels(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -42,7 +42,7 @@ class ChannelController extends Controller
     /**
      * Get public channels for the user's company (visible to all company users)
      */
-    public function getPublic(Request $request)
+    public function getPublicChannels(Request $request)
     {
         $company = $request->resolved_company; // from middleware company.associated
 
@@ -57,7 +57,7 @@ class ChannelController extends Controller
     /**
      * Get private channels for the user (creator or member only)
      */
-    public function getPrivate(Request $request)
+    public function getPrivateChannels(Request $request)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -80,7 +80,7 @@ class ChannelController extends Controller
     /**
      * Store a newly created channel in storage.
      */
-    public function create(CreateChannelRequest $request)
+    public function createChannels(CreateChannelRequest $request)
     {
         /** @var User $user */
         $user = Auth::user();
@@ -109,7 +109,7 @@ class ChannelController extends Controller
      * Update the specified channel in storage.
      * This method is protected by ChannelOwnerMiddleware
      */
-    public function update(UpdateChannelRequest $request, $id)
+    public function updateChannels(UpdateChannelRequest $request, $id)
     {
         $channel = $request->attributes->get('channel');
 
@@ -126,7 +126,7 @@ class ChannelController extends Controller
      * Remove the specified channel from storage.
      * This method is protected by ChannelOwnerMiddleware
      */
-    public function remove($id)
+    public function removeChannels($id)
     {
         $channel = request()->attributes->get('channel');
         $channelName = $channel->name;

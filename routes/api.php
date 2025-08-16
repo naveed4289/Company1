@@ -15,11 +15,11 @@ use App\Http\Controllers\MessageController;
 // POST /api/register → Register a new user
 Route::post('/register', [AuthController::class, 'register']);
 // POST /api/login → Login and get token
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/login', [AuthController::class, 'login'])->middleware(['login.email.verification']);;
 // POST /api/logout → Logout current token
 Route::post('/logout', [AuthController::class, 'logout'])->middleware(['validate.auth.token']);
 
-// =============================================
+// =============================================  
 // EmailVerificationController - Email verification APIs
 // =============================================
 // GET /api/email/verify/{id}/{hash} → Verify email via signed URL
@@ -39,7 +39,7 @@ Route::post('/reset-password', [PasswordResetController::class, 'resetPassword']
 
 
 // =============================================
-// Protected routes (require auth token)
+// Protected routes (require auth token) 
 // =============================================
 Route::middleware(['auth.token'])->group(function () {
 
@@ -47,10 +47,10 @@ Route::middleware(['auth.token'])->group(function () {
     // CompanyInvitationController - Company APIs
     // -----------------------------------------
     // POST /api/company/invite → Invite user to company (creates user if not exists)
-    Route::post('/company/invite', [AuthController::class, 'sendInvitation'])
+    Route::post('/company/invite', [CompanyInvitationController::class, 'sendCompanyInvitation'])
         ->middleware(['user.has.company', 'prevent.duplicate.invitation']);
     // DELETE /api/company/employee → Remove employee from company
-    Route::delete('/company/employee', [CompanyInvitationController::class, 'removeEmployee'])
+    Route::delete('/company/employee', [CompanyInvitationController::class, 'removeCompanyEmployee'])
         ->middleware(['user.has.company', 'validate.employee.exists']);
     // GET /api/company/data → Get company with employees and pending invitations
     Route::get('/company/data', [CompanyInvitationController::class, 'getCompanyData'])
@@ -60,13 +60,13 @@ Route::middleware(['auth.token'])->group(function () {
     // ChannelController - Channel management APIs
     // -----------------------------------------
     // GET /api/channels → Get all channels visible to user (public + user's private)
-    Route::get('/channels', [ChannelController::class, 'get'])->middleware(['company.associated']);
+    Route::get('/channels', [ChannelController::class, 'getChannels'])->middleware(['company.associated']);
     // GET /api/channels/public → Get all public channels in user's company
-    Route::get('/channels/public', [ChannelController::class, 'getPublic'])->middleware(['company.associated']);
+    Route::get('/channels/public', [ChannelController::class, 'getPublicChannels'])->middleware(['company.associated']);
     // GET /api/channels/private → Get user's private channels (creator or member)
-    Route::get('/channels/private', [ChannelController::class, 'getPrivate'])->middleware(['company.associated']);
+    Route::get('/channels/private', [ChannelController::class, 'getPrivateChannels'])->middleware(['company.associated']);
     // POST /api/channels → Create a channel for a company
-    Route::post('/channels', [ChannelController::class, 'create'])->middleware(['company.access']);
+    Route::post('/channels', [ChannelController::class, 'createChannels'])->middleware(['company.access']);
     // POST /api/channels/members → Add member to private channel
     Route::post('/channels/members', [ChannelController::class, 'addMember'])
         ->middleware(['channel.load', 'channel.manage', 'channel.private', 'channel.member.same_company']);
@@ -76,8 +76,8 @@ Route::middleware(['auth.token'])->group(function () {
     // PATCH /api/channels/{id} → Update channel (owner)
     // DELETE /api/channels/{id} → Delete channel (owner)
     Route::middleware(['channel.owner', 'channel.load'])->group(function () {
-        Route::patch('/channels/{id}', [ChannelController::class, 'update']);
-        Route::delete('/channels/{id}', [ChannelController::class, 'remove']);
+        Route::patch('/channels/{id}', [ChannelController::class, 'updateChannels']);
+        Route::delete('/channels/{id}', [ChannelController::class, 'removeChannels']);
     });
 
     // -----------------------------------------
@@ -98,5 +98,5 @@ Route::middleware(['auth.token'])->group(function () {
 // Public - Accept company invitation
 // =============================================
 // GET /api/company-invitation/accept/{token} → Accept invitation link
-Route::get('/company-invitation/accept/{token}', [CompanyInvitationController::class, 'acceptInvitation'])
+Route::get('/company-invitation/accept/{token}', [CompanyInvitationController::class, 'acceptCompanyInvitation'])
     ->middleware(['validate.invitation.token']);

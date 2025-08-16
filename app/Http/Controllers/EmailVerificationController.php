@@ -5,28 +5,32 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\VerifyEmailRequest;
-use App\Services\EmailVerificationService;
+use App\Mail\VerifyEmailMail;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\URL;
 
 class EmailVerificationController extends Controller
 {
-    protected EmailVerificationService $emailVerificationService;
-    
-    public function __construct(EmailVerificationService $emailVerificationService)
-    {
-        $this->emailVerificationService = $emailVerificationService;
-    }
-    
     public function sendVerificationEmail(User $user)
     {
-        $this->emailVerificationService->sendVerificationEmail($user);
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            ['id' => $user->id, 'hash' => sha1($user->email)]
+        );
+
+        Mail::to($user->email)->send(new VerifyEmailMail($verificationUrl, $user));
     }
 
     public function verifyEmail(VerifyEmailRequest $request)
     {
         $user = $request->user_model; // Coming from middleware
         
-        $response = $this->emailVerificationService->verifyUserEmail($user);
-        
-        return response()->json($response);
+        $user->update(['email_verified_at' => now()]);
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Email verified successfully. You can now login.'
+        ]);
     }
 }

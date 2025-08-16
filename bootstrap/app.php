@@ -14,7 +14,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'channel.owner' => \App\Http\Middleware\ChannelOwnerMiddleware::class,
-            'auth.token' => \App\Http\Middleware\AuthToken::class,
+            'auth.token' => \App\Http\Middleware\AuthToken::class, 
             'user.has.company' => \App\Http\Middleware\EnsureUserHasCompany::class,
             'email.verified' => \App\Http\Middleware\EnsureEmailVerified::class,
             'login.email.verification' => \App\Http\Middleware\HandleLoginEmailVerification::class,
