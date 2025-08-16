@@ -42,6 +42,30 @@ return [
             'retry_after' => (int) env('DB_QUEUE_RETRY_AFTER', 90),
             'after_commit' => false,
         ],
+        'verification_emails' => [
+            'driver' => 'database',
+            'connection' => env('DB_QUEUE_CONNECTION'), // Use same DB connection as default
+            'table' => env('DB_QUEUE_TABLE', 'jobs'), // Use same table
+            'queue' => 'verification_emails', // Dedicated queue name
+            'retry_after' => 90,
+            'after_commit' => false, // Add this for consistency
+        ],
+        'password_resets' => [
+            'driver' => 'database',
+            'connection' => env('DB_QUEUE_CONNECTION'), // Use same DB connection as default
+            'table' => env('DB_QUEUE_TABLE', 'jobs'), // Use same table
+            'queue' => 'password_resets',
+            'retry_after' => 90,
+            'after_commit' => false, // Add this for consistency
+        ],
+        'company_invitations' => [
+            'driver' => 'database',
+            'connection' => env('DB_QUEUE_CONNECTION'), // Use same DB connection as default
+            'table' => env('DB_QUEUE_TABLE', 'jobs'), // Use same table
+            'queue' => 'company_invitations',
+            'retry_after' => 90,
+            'after_commit' => false, // Add this for consistency
+        ],
 
         'beanstalkd' => [
             'driver' => 'beanstalkd',

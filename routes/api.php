@@ -23,8 +23,11 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware(['validate
 // EmailVerificationController - Email verification APIs
 // =============================================
 // GET /api/email/verify/{id}/{hash} → Verify email via signed URL
+// Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])
+//     ->middleware(['validate.email.verification'])
+//     ->name('verification.verify');
 Route::get('/email/verify/{id}/{hash}', [EmailVerificationController::class, 'verifyEmail'])
-    ->middleware(['validate.email.verification'])
+     ->middleware(['signed', 'validate.email.verification'])
     ->name('verification.verify');
 
 // =============================================
@@ -99,4 +102,5 @@ Route::middleware(['auth.token'])->group(function () {
 // =============================================
 // GET /api/company-invitation/accept/{token} → Accept invitation link
 Route::get('/company-invitation/accept/{token}', [CompanyInvitationController::class, 'acceptCompanyInvitation'])
-    ->middleware(['validate.invitation.token']);
+    ->name('company.invitation.accept')
+    ->middleware('validate.invitation.token');

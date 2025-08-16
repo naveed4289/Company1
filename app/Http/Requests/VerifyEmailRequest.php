@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Models\User;
 
 class VerifyEmailRequest extends FormRequest
 {
@@ -16,16 +17,15 @@ class VerifyEmailRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'id' => 'required|integer|exists:users,id',
+            'id'   => 'required|integer|exists:users,id',
             'hash' => 'required|string',
         ];
     }
 
     public function prepareForValidation()
     {
-        // Add route parameters to validation
         $this->merge([
-            'id' => $this->route('id'),
+            'id'   => $this->route('id'),
             'hash' => $this->route('hash')
         ]);
     }
@@ -34,9 +34,20 @@ class VerifyEmailRequest extends FormRequest
     {
         throw new HttpResponseException(
             response()->json([
-                'status' => 'error',
-                'message' => 'Invalid verification data'
+                'status'  => 'error',
+                'message' => $validator->errors()->first() ?: 'Invalid verification data'
             ], 403)
         );
+    }
+
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator) {
+            $user = User::find($this->id);
+
+            if ($user && !hash_equals(sha1($user->email), $this->hash)) {
+                $validator->errors()->add('hash', 'Invalid verification data');
+            }
+        });
     }
 }

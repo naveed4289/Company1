@@ -10,21 +10,11 @@ class ValidateEmailVerification
 {
     public function handle(Request $request, Closure $next)
     {
-        // Check if request has valid signature
-        if (!$request->hasValidSignature()) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid or expired verification link.'
-            ], 403);
-        }
-
-        $userId = $request->route('id');
-        $hash = $request->route('hash');
-
-        $user = User::findOrFail($userId);
+        // No need to check signature here - signed middleware already did that
+        $user = User::findOrFail($request->route('id'));
 
         // Validate hash matches user email
-        if (sha1($user->email) !== $hash) {
+        if (!hash_equals(sha1($user->email), $request->route('hash'))) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Invalid verification data.'
@@ -32,7 +22,7 @@ class ValidateEmailVerification
         }
 
         // Check if email is already verified
-        if ($user->email_verified_at) {
+        if ($user->hasVerifiedEmail()) {
             return response()->json([
                 'status' => 'success',
                 'message' => 'Email already verified.'
