@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\ChannelResponse;
 use App\Models\Channel;
 use App\Models\Company;
 use App\Models\User;
@@ -13,118 +14,70 @@ use Illuminate\Support\Facades\Auth;
 class ChannelController extends Controller
 {
     /**
-     * Get all channels for user's company
+     * Fetch all channels accessible to the authenticated user.
+     * Includes public channels and private channels the user is a member of.
      */
     public function getChannels(Request $request)
     {
-        /** @var User $user */
         $user = Auth::user();
-        $company = $request->resolved_company; // ensure employees also work
+        $company = $request->resolved_company;
+        $channels = Channel::fetchAllForUser($user, $company);
 
-        $publicChannels = $company->channels()
-            ->where('type', 'public')
-            ->with(['creator:id,first_name,last_name'])
-            ->get();
-
-        $privateChannels = $company->channels()
-            ->where('type', 'private')
-            ->whereHas('members', function($query) use ($user) {
-                $query->where('user_id', $user->id);
-            })
-            ->with(['creator:id,first_name,last_name', 'members:id,first_name,last_name'])
-            ->get();
-
-        $channels = $publicChannels->merge($privateChannels);
-
-        return response()->json(['data' => $channels]);
+        return ChannelResponse::channelsFetched($channels);
     }
 
     /**
-     * Get public channels for the user's company (visible to all company users)
+     * Fetch public channels for the user's company.
      */
     public function getPublicChannels(Request $request)
     {
-        $company = $request->resolved_company; // from middleware company.associated
+        $company = $request->resolved_company;
+        $channels = Channel::fetchPublicForCompany($company);
 
-        $channels = $company->channels()
-            ->where('type', 'public')
-            ->with(['creator:id,first_name,last_name'])
-            ->get();
-
-        return response()->json(['data' => $channels]);
+        return ChannelResponse::channelsFetched($channels);
     }
 
     /**
-     * Get private channels for the user (creator or member only)
+     * Fetch private channels for the authenticated user.
      */
     public function getPrivateChannels(Request $request)
     {
-        /** @var User $user */
         $user = Auth::user();
-        $company = $request->resolved_company; // from middleware company.associated
+        $company = $request->resolved_company;
+        $channels = Channel::fetchPrivateForUser($user, $company);
 
-        $channels = $company->channels()
-            ->where('type', 'private')
-            ->where(function ($query) use ($user) {
-                $query->where('created_by', $user->id)
-                    ->orWhereHas('members', function ($q) use ($user) {
-                        $q->where('user_id', $user->id);
-                    });
-            })
-            ->with(['creator:id,first_name,last_name', 'members:id,first_name,last_name'])
-            ->get();
-
-        return response()->json(['data' => $channels]);
+        return ChannelResponse::channelsFetched($channels);
     }
 
     /**
-     * Store a newly created channel in storage.
+     * Create a new channel for the company.
+     * Handles private channel membership automatically.
      */
     public function createChannels(CreateChannelRequest $request)
     {
-        /** @var User $user */
         $user = Auth::user();
-        $company = $request->resolved_company; // from middleware
+        $company = $request->resolved_company;
+        $channel = Channel::createForCompany($user, $company, $request->name, $request->type);
 
-        $channel = Channel::create([
-            'name' => $request->name,
-            'type' => $request->type,
-            'company_id' => $company->id,
-            'created_by' => $user->id
-        ]);
-
-        if ($channel->type === 'private') {
-            $channel->addMember($user);
-        }
-
-        $channel->load(['company', 'creator']);
-
-        return response()->json([
-            'message' => 'Channel created successfully',
-            'data' => $channel
-        ], 201);
+        return ChannelResponse::channelCreated($channel);
     }
 
     /**
-     * Update the specified channel in storage.
-     * This method is protected by ChannelOwnerMiddleware
+     * Update an existing channel.
+     * Only accessible by the channel creator (middleware protected).
      */
     public function updateChannels(UpdateChannelRequest $request, $id)
     {
         $channel = $request->attributes->get('channel');
-
         $channel->update($request->only(['name', 'type']));
         $channel->load(['company', 'creator']);
 
-        return response()->json([
-            'message' => 'Channel updated successfully',
-            'data' => $channel
-        ]);
+        return ChannelResponse::channelUpdated($channel);
     }
 
     /**
-     * Remove the specified channel from storage.
-     * This method is protected by ChannelOwnerMiddleware
+     * Delete a channel.
+     * Only accessible by the channel creator (middleware protected).
      */
     public function removeChannels($id)
     {
@@ -132,31 +85,30 @@ class ChannelController extends Controller
         $channelName = $channel->name;
         $channel->delete();
 
-        return response()->json(['message' => "Channel '{$channelName}' deleted successfully"]);
+        return ChannelResponse::channelDeleted($channelName);
     }
 
     /**
-     * Add a member to a private channel
+     * Add a member to a private channel.
      */
     public function addMember(\App\Http\Requests\AddChannelMemberRequest $request)
     {
         $channel = $request->attributes->get('channel');
-        $memberUser = $request->member_user; // from middleware
-
+        $memberUser = $request->member_user;
         $channel->addMember($memberUser);
 
-        return response()->json(['message' => 'Member added to channel successfully']);
+        return ChannelResponse::memberAdded($memberUser);
     }
 
     /**
-     * Remove a member from a private channel
+     * Remove a member from a private channel.
      */
     public function removeMember(\App\Http\Requests\RemoveChannelMemberRequest $request)
     {
         $channel = $request->attributes->get('channel');
-        $memberUser = $request->member_user; // from middleware
+        $memberUser = $request->member_user;
         $channel->removeMember($memberUser);
 
-        return response()->json(['message' => 'Member removed from channel successfully']);
+        return ChannelResponse::memberRemoved($memberUser);
     }
 }

@@ -19,8 +19,7 @@ class EmailVerificationController extends Controller
         );
 
         // Dispatch job with the pre-generated URL
-        SendVerificationEmail::dispatch($user, $verificationUrl)
-            ->onQueue('verification_emails');
+        SendVerificationEmail::dispatch($user, $verificationUrl)->onQueue('verification_emails');
     }
 
     public function verifyEmail(VerifyEmailRequest $request)
@@ -28,7 +27,6 @@ class EmailVerificationController extends Controller
         // $user = User::findOrFail($request->id);
 
         $request->user_model->update(['email_verified_at' => now()]);
-
         return response()->json([
             'status'  => 'success',
             'message' => 'Email verified successfully'

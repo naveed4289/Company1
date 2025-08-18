@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResponse;
 use App\Models\Message;
 use App\Models\Channel;
 use Illuminate\Http\Request;
@@ -10,63 +11,56 @@ use Illuminate\Support\Facades\Auth;
 class MessageController extends Controller
 {
     /**
-     * Get messages for a specific channel
+     * Fetch messages for a specific channel.
+     * Uses the static method in the Message model to get paginated messages.
      */
     public function getMessages(Request $request, $channelId)
     {
+        // Get the resolved channel from request attributes (middleware)
         $channel = request()->attributes->get('channel');
 
+        // Number of messages per page, default 50
         $perPage = $request->get('per_page', 50);
-        $messages = $channel->messages()
-            ->with(['user:id,first_name,last_name,email','attachments'])
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
 
-        return response()->json(['data' => $messages]);
+        // Fetch messages using static method in Message model
+        $messages = Message::fetchForChannel($channel, $perPage);
+
+        // Return formatted response using resource
+        return MessageResponse::messagesFetched($messages);
     }
 
     /**
-     * Send a message to a channel
+     * Send a new message to a channel, optionally with attachments.
+     * Uses the Message model static method to handle creation and attachments.
      */
     public function sendMessage(\App\Http\Requests\SendMessageRequest $request)
     {
+        // Authenticated user
         $user = Auth::user();
+
+        // Get the resolved channel from request attributes (middleware)
         $channel = request()->attributes->get('channel');
 
-        $message = Message::create([
-            'channel_id' => $channel->id,
-            'user_id' => $user->id,
-            'content' => $request->content
-        ]);
+        // Create the message and handle attachments using static method
+        $message = Message::sendToChannel($user, $channel, $request->content, $request->file('attachments'));
 
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                $stored = $file->store('attachments', 'public');
-                $message->attachments()->create([
-                    'path' => $stored,
-                    'mime' => $file->getMimeType(),
-                    'size' => $file->getSize(),
-                    'original_name' => $file->getClientOriginalName(),
-                    'type' => str_starts_with($file->getMimeType(), 'image/') ? 'image' : (str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'file'),
-                ]);
-            }
-        }
-
-        $message->load(['user:id,first_name,last_name,email','attachments']);
-
-        return response()->json([
-            'message' => 'Message sent successfully',
-            'data' => $message
-        ], 201);
+        // Return formatted response using resource
+        return MessageResponse::messageSent($message);
     }
 
     /**
-     * Delete a message (only message sender or channel creator/company owner can delete)
+     * Delete a message from a channel.
+     * Only the sender or authorized users can delete.
      */
     public function deleteMessage($messageId)
     {
+        // Get the message from request attributes (middleware)
         $message = request()->attributes->get('message');
+
+        // Delete the message
         $message->delete();
-        return response()->json(['message' => 'Message deleted successfully']);
+
+        // Return formatted response
+        return MessageResponse::messageDeleted();
     }
 }

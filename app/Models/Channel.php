@@ -157,4 +157,74 @@ class Channel extends Model
 
         return false;
     }
+
+    /**
+     * ✅ Get all channels for a user in a company
+     */
+    public static function fetchAllForUser(User $user, Company $company)
+    {
+        $publicChannels = $company->channels()
+            ->where('type', 'public')
+            ->with(['creator:id,first_name,last_name'])
+            ->get();
+
+        $privateChannels = $company->channels()
+            ->where('type', 'private')
+            ->whereHas('members', function ($query) use ($user) {
+                $query->where('user_id', $user->id);
+            })
+            ->with(['creator:id,first_name,last_name', 'members:id,first_name,last_name'])
+            ->get();
+
+        return $publicChannels->merge($privateChannels);
+    }
+
+    /**
+     * ✅ Get public channels for a company
+     */
+    public static function fetchPublicForCompany(Company $company)
+    {
+        return $company->channels()
+            ->where('type', 'public')
+            ->with(['creator:id,first_name,last_name'])
+            ->get();
+    }
+
+    /**
+     * ✅ Get private channels for a user (creator or member)
+     */
+    public static function fetchPrivateForUser(User $user, Company $company)
+    {
+        return $company->channels()
+            ->where('type', 'private')
+            ->where(function ($query) use ($user) {
+                $query->where('created_by', $user->id)
+                    ->orWhereHas('members', function ($q) use ($user) {
+                        $q->where('user_id', $user->id);
+                    });
+            })
+            ->with(['creator:id,first_name,last_name', 'members:id,first_name,last_name'])
+            ->get();
+    }
+
+    /**
+     * ✅ Create a new channel for a company and add creator as member if private
+     */
+    public static function createForCompany(User $creator, Company $company, string $name, string $type): self
+    {
+        $channel = self::create([
+            'name' => $name,
+            'type' => $type,
+            'company_id' => $company->id,
+            'created_by' => $creator->id,
+        ]);
+
+        if ($type === 'private') {
+            $channel->addMember($creator);
+        }
+
+        $channel->load(['company', 'creator']);
+
+        return $channel;
+    }
 }

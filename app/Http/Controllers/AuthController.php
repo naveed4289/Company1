@@ -7,67 +7,51 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Requests\LoginCredentialsRequest;
 use App\Models\User;
 use App\Models\UserToken;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\AuthResponse;
 
 class AuthController extends Controller
 {
+    /**
+     * Handle user registration.
+     * - Creates a new user with the provided data
+     * - Creates a default company for the user
+     * - Sends email verification link
+     * - Returns a standardized AuthResponse
+     */
     public function register(RegisterRequest $request)
     {
-        $user = User::create([
-            'first_name' => $request->first_name,
-            'last_name'  => $request->last_name,
-            'email'      => strtolower($request->email),
-            'password'   => Hash::make($request->password),
-        ]);
-
-        // Create company for this user
-        $companyName = $user->first_name . ' ' . $user->last_name . ' Company';
-        $user->company()->create(['name' => $companyName]);
-
-        // Email verification
+        $user = User::createUser($request->all());
+        User::createDefaultCompany($user);
         app(EmailVerificationController::class)->sendVerificationEmail($user);
-
-        return response()->json([
-            'message' => 'Account created. Please verify your email to activate your account.'
-        ], 201);
+        return AuthResponse::registered($user);
     }
 
+    /**
+     * Handle user login.
+     * - Validates login credentials (handled by LoginCredentialsRequest)
+     * - Retrieves authenticated user and loads related company
+     * - Generates a new token for this session/device
+     * - Returns a standardized AuthResponse with user + token
+     */
     public function login(LoginCredentialsRequest $request)
     {
         /** @var User $user */
         $user = Auth::user();
         $user->load('company');
-
-        $token = uniqid('tok_', true);
-        UserToken::create([
-            'user_id' => $user->id,
-            'token' => $token,
-            'device_name' => $request->header('User-Agent')
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Login successful.',
-            'user' => [
-                'id' => $user->id,
-                'first_name' => $user->first_name,
-                'last_name' => $user->last_name,
-                'email' => $user->email,
-                'company_name' => $user->company ? $user->company->name : null,
-            ],
-            'token' => $token
-        ], 200);
+        $token = UserToken::generateFor($user, $request->header('User-Agent'));
+        return AuthResponse::loggedIn($user, $token);
     }
 
+    /**
+     * Handle user logout.
+     * - Deletes the current user token from database
+     * - Returns a standardized AuthResponse with logout message
+     */
     public function logout(Request $request)
     {
         $userToken = $request->user_token_model;
         $userToken->delete();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Logged out from this device.'
-        ], 200);
+        return AuthResponse::loggedOut();
     }
 }

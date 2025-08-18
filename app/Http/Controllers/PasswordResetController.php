@@ -6,53 +6,68 @@ use App\Http\Requests\ForgotPasswordRequest;
 use App\Http\Requests\ResetPasswordRequest;
 use App\Jobs\SendPasswordResetEmail;
 use App\Models\PasswordReset;
-use App\Models\User;
 use App\Models\UserToken;
-use App\Mail\ResetPasswordMail;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use Carbon\Carbon;
+use App\Http\Resources\AuthResponse;
 
 class PasswordResetController extends Controller
 {
+    /**
+     * Handle Forgot Password request
+     * - Generate token
+     * - Save token in DB
+     * - Dispatch reset email
+     * - Return success response
+     */
     public function forgotPassword(ForgotPasswordRequest $request)
-{
-    $user = $request->user_model;
-    $token = Str::random(60);
-    
-    // Delete old tokens and create new one
-    PasswordReset::where('email', $user->email)->delete();
-    PasswordReset::create([
-        'email' => strtolower($user->email),
-        'token' => $token,
-        'created_at' => Carbon::now()
-    ]);
-    
-    // Queue the reset email
-    SendPasswordResetEmail::dispatch(
-        $user,
-        route('password.reset', ['token' => $token, 'email' => $user->email])
-    );
+    {
+        // ✅ User already validated in request
+        $user = $request->user_model;
 
-    return response()->json([
-        'status' => 'success',
-        'message' => 'Password reset link has been sent to your email.'
-    ]);
-}
+        // ✅ Generate secure random token
+        $token = Str::random(60);
 
+        // ✅ Save / Update token in password_resets table
+        PasswordReset::generateToken($user->email, $token);
+
+        // ✅ Dispatch job for sending password reset email
+        SendPasswordResetEmail::dispatch(
+            $user,
+            route('password.reset', [
+                'token' => $token,
+                'email' => $user->email
+            ])
+        );
+
+        // ✅ Return standard success response
+        return AuthResponse::passwordResetLinkSent();
+    }
+
+    /**
+     * Handle Reset Password request
+     * - Update user password
+     * - Remove used password reset token
+     * - Logout from all devices (delete user tokens)
+     * - Return success response
+     */
     public function resetPassword(ResetPasswordRequest $request)
     {
+        // ✅ User already validated in request
         $user = $request->user_model;
+
+        // ✅ Update user password (hashed)
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
         
-        // Update password and clean up
-        $user->update(['password' => Hash::make($request->password)]);
+        // ✅ Delete password reset record for this email
         PasswordReset::where('email', $user->email)->delete();
+
+        // ✅ Delete all user tokens (logout from all devices)
         UserToken::where('user_id', $user->id)->delete();
 
-        return response()->json([
-            'status' => 'success', 
-            'message' => 'Password has been reset successfully.'
-        ]);
+        // ✅ Return standard success response
+        return AuthResponse::passwordResetSuccess();
     }
 }

@@ -51,4 +51,42 @@ class Message extends Model
     {
         return $query->orderBy('created_at', 'desc')->limit($limit);
     }
+    /**
+     * Static method: Fetch messages for a channel with pagination
+     */
+    public static function fetchForChannel($channel, $perPage = 50)
+    {
+        return $channel->messages()
+            ->with(['user:id,first_name,last_name,email', 'attachments'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
+    }
+
+    /**
+     * Static method: Send a message with optional attachments
+     */
+    public static function sendToChannel($user, $channel, $content, $attachments = null)
+    {
+        $message = self::create([
+            'channel_id' => $channel->id,
+            'user_id' => $user->id,
+            'content' => $content
+        ]);
+
+        if ($attachments) {
+            foreach ($attachments as $file) {
+                $stored = $file->store('attachments', 'public');
+
+                $message->attachments()->create([
+                    'path' => $stored,
+                    'mime' => $file->getMimeType(),
+                    'size' => $file->getSize(),
+                    'original_name' => $file->getClientOriginalName(),
+                    'type' => str_starts_with($file->getMimeType(), 'image/') ? 'image' : (str_starts_with($file->getMimeType(), 'video/') ? 'video' : 'file'),
+                ]);
+            }
+        }
+
+        return $message->load(['user:id,first_name,last_name,email', 'attachments']);
+    }
 }
