@@ -10,1382 +10,1416 @@
 			"name": "Auth",
 			"item": [
 				{
-					"name": "message",
+					"name": "Register",
 					"item": []
+				},
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Login success\", () => {\r",
+											"    const d = pm.response.json();\r",
+											"    pm.response.to.have.status(200);\r",
+											"    pm.expect(d.status).to.eql(\"success\");\r",
+											"    pm.expect(d.data.user).to.have.all.keys(\"id\",\"first_name\",\"last_name\",\"email\",\"company_name\");\r",
+											"    pm.expect(d.data.token).to.be.a(\"string\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript",
+										"packages": {}
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\":\"nav3@gmail.com\",\r\n    \"password\":\"Rn@0113\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/login",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Logout",
+					"item": []
+				},
+				{
+					"name": "Succes",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Registration success\", function() {\r",
+									"    pm.response.to.have.status(201); // HTTP status code check\r",
+									"    const data = pm.response.json();\r",
+									"    pm.expect(data.status).to.eql(\"success\");\r",
+									"    pm.expect(data.data.user).to.include.keys(\"id\", \"first_name\", \"last_name\", \"email\", \"company_name\");\r",
+									"    pm.expect(data.data.token).to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n     \"first_name\": \"Naveed\",\r\n    \"last_name\": \"ddd\",\r\n    \"email\": \"nav6@gmail.com\",\r\n    \"password\": \"Rn@0113\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/register",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Login success\", () => {\r",
+									"    const d = pm.response.json();\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(d.status).to.eql(\"success\");\r",
+									"    pm.expect(d.data.user).to.have.all.keys(\"id\",\"first_name\",\"last_name\",\"email\",\"company_name\");\r",
+									"    pm.expect(d.data.token).to.be.a(\"string\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"nav3@gmail.com\",\r\n    \"password\":\"Rn@0113\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Logout success\", () => {\r",
+									"    const d = pm.response.json();\r",
+									"    pm.response.to.have.status(200);\r",
+									"    pm.expect(d.status).to.eql(\"success\");\r",
+									"    pm.expect(d.message).to.eql(\"Logged out successfully.\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a37e248b6425.53512578",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/logout",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "forgot",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (200 for success, 422 for validation error)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([200, 404]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success message (if email sent)\r",
+									"pm.test(\"API returns success message if email sent\", function () {\r",
+									"    if(pm.response.code === 200){\r",
+									"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Password reset link has been sent to your email.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 3: Validation error message (if email invalid or missing)\r",
+									"pm.test(\"API returns validation error if input invalid\", function () {\r",
+									"    if(pm.response.code === 422){\r",
+									"        pm.expect(jsonData).to.have.property(\"errors\");\r",
+									"        pm.expect(jsonData.errors).to.have.property(\"email\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"ahmadali40189@gmail.com\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/forgot-password",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"forgot-password"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "reset",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (200 for success, 422 for validation error)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([200, 400]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success message (if password reset successful)\r",
+									"pm.test(\"API returns success message if password reset successful\", function () {\r",
+									"    if(pm.response.code === 200){\r",
+									"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Password has been reset successfully.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 3: Validation error message (if input invalid)\r",
+									"pm.test(\"API returns validation error if input invalid\", function () {\r",
+									"    if(pm.response.code === 422){\r",
+									"        pm.expect(jsonData).to.have.property(\"errors\");\r",
+									"\r",
+									"        // Optional: Check for specific fields\r",
+									"        let errorFields = [\"email\", \"token\", \"password\", \"password_confirmation\"];\r",
+									"        errorFields.forEach(function(field){\r",
+									"            if(jsonData.errors[field]){\r",
+									"                pm.expect(jsonData.errors[field]).to.be.an(\"array\");\r",
+									"            }\r",
+									"        });\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"email\": \"ahmadali40189@gmail.com\",\r\n  \"token\": \"rJ8QyFTE5DwoiHGUKZmEB7aRINAXhWw5Fv6pQ39NfF3yk8kSCXJSMtDV1S3l\",\r\n  \"password\": \"Rn@00113\",\r\n  \"password_confirmation\": \"Rn@00113\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/reset-password",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"reset-password"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "CompanyInvite",
-			"item": []
+			"item": [
+				{
+					"name": "invite",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (200 success, 422 validation error, 401 unauthorized)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([200, 422, 400,401]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success message (if invite sent)\r",
+									"pm.test(\"API returns success message if invite sent\", function () {\r",
+									"    if(pm.response.code === 200){\r",
+									"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invitation sent\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 3: Validation error (if email missing/invalid)\r",
+									"pm.test(\"API returns validation error if input invalid\", function () {\r",
+									"    if(pm.response.code === 422){\r",
+									"        pm.expect(jsonData).to.have.property(\"errors\");\r",
+									"        pm.expect(jsonData.errors).to.have.property(\"email\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 4: Unauthorized error (if token missing/invalid)\r",
+									"pm.test(\"API returns error if token invalid or missing\", function () {\r",
+									"    if(pm.response.code === 401){\r",
+									"        // Laravel default unauthorized response\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Unauthorized\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a0c9668691a1.04780797",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\":\"rni755x755@gmail.com\"\r\n    \r\n     \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/company/invite",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"company",
+								"invite"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get company",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (200 success, 401 unauthorized)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([200, 401]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success response (if token valid)\r",
+									"pm.test(\"API returns company data if token valid\", function () {\r",
+									"    if(pm.response.code === 200){\r",
+									"        pm.expect(jsonData).to.have.property(\"company\"); // company key hai\r",
+									"        pm.expect(jsonData.company).to.be.an(\"object\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 3: Unauthorized response (if token missing/invalid)\r",
+									"pm.test(\"API returns error if token invalid or missing\", function () {\r",
+									"    if(pm.response.code === 401){\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/company/data",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"company",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "remove",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (200 success, 422 validation error, 401 unauthorized)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([200, 422, 401,404]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success message (employee removed successfully)\r",
+									"pm.test(\"API returns success message if employee removed\", function () {\r",
+									"    if(pm.response.code === 200){\r",
+									"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Employee removed\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 3: Validation error (if employee_id missing/invalid)\r",
+									"pm.test(\"API returns validation error if employee_id invalid\", function () {\r",
+									"    if(pm.response.code === 422){\r",
+									"        pm.expect(jsonData).to.have.property(\"errors\");\r",
+									"        pm.expect(jsonData.errors).to.have.property(\"employee_id\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 4: Unauthorized (if token missing/invalid)\r",
+									"pm.test(\"API returns error if token invalid or missing\", function () {\r",
+									"    if(pm.response.code === 401){\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a0c9668691a1.04780797s",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"employee_id\": 32\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/company/employee",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"company",
+								"employee"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		},
 		{
 			"name": "channels",
-			"item": []
-		},
-		{
-			"name": "Register",
-			"event": [
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (201 for success, 422 for validation errors)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([201, 422]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message\r",
-							"pm.test(\"API returns success message if account created\", function () {\r",
-							"    if(pm.response.code === 201){\r",
-							"        pm.expect(jsonData.message).to.eql(\"Account created. Please verify your email to activate your account.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Validation error message (for empty fields or invalid input)\r",
-							"pm.test(\"API returns validation error if input is invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\"); // Laravel validation errors\r",
-							"    }\r",
-							"});\r",
-							""
+					"name": "createChannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse the JSON response\r",
+									"let jsonData = pm.response.json();\r",
+									"\r",
+									"// ✅ Test 1: Status code (201 success, 422 validation error, 401 unauthorized)\r",
+									"pm.test(\"Status code is correct\", function () {\r",
+									"    pm.expect([201, 422, 401]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 2: Success message and channel data (if channel created)\r",
+									"pm.test(\"API returns success message and channel data\", function () {\r",
+									"    if(pm.response.code === 201){\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Channel created successfully\");\r",
+									"        pm.expect(jsonData).to.have.property(\"data\"); // channel data\r",
+									"        pm.expect(jsonData.data).to.be.an(\"object\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"id\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"name\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"type\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"company_id\");\r",
+									"    }\r",
+									"});\r",
+									"// ✅ Test 3: Validation error (if fields missing/invalid)\r",
+									"pm.test(\"API returns validation error if input invalid\", function () {\r",
+									"    if(pm.response.code === 422){\r",
+									"        pm.expect(jsonData).to.have.property(\"errors\");\r",
+									"        [\"name\",\"type\",\"company_id\"].forEach(function(field){\r",
+									"            if(jsonData.errors[field]){\r",
+									"                pm.expect(jsonData.errors[field]).to.be.an(\"array\");\r",
+									"            }\r",
+									"        });\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Test 4: Unauthorized (if token missing/invalid)\r",
+									"pm.test(\"API returns error if token invalid or missing\", function () {\r",
+									"    if(pm.response.code === 401){\r",
+									"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token.\");\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text",
-						"disabled": true
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"name\": \"publicffff channel Pf Force\",\r\n  \"type\": \"public\",\r\n  \"company_id\": 79\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels"
+							]
+						}
 					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text",
-						"disabled": true
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n     \"first_name\": \"Naveed\",\r\n    \"last_name\": \"ddd\",\r\n    \"email\": \"nav1@gmail.com\",\r\n    \"password\": \"Rn@0113\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"response": []
 				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/register",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"register"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "login",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 for success, 401 for invalid credentials)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 401]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (if login successful)\r",
-							"pm.test(\"API returns success message if login successful\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"token\"); // agar token return ho rahi ho\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Error message (if login fails)\r",
-							"pm.test(\"API returns error message if credentials invalid\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"error\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\", \"Invalid credentials.\");\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"nav1@gmail.com\",\r\n    \"password\":\"Rn@0113\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "updateChannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// ✅ Status code test\r",
+									"pm.test(\"Response received\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 401, 403]);\r",
+									"});\r",
+									"\r",
+									"// ✅ Body must contain message field\r",
+									"pm.test(\"Body has message field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"// ✅ Success case\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Channel updated successfully\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.eql(\"Channel updated successfully\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// ✅ Unauthorized/Error case\r",
+									"if (pm.response.code === 401 || pm.response.code === 403) {\r",
+									"    pm.test(\"Unauthorized access handled properly\", function () {\r",
+									"        pm.expect(pm.response.json()).to.have.property(\"message\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/login",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
 					],
-					"port": "8000",
-					"path": [
-						"api",
-						"login"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "logout",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 for success, 401 for invalid token)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 400]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (if logout successful)\r",
-							"pm.test(\"API returns success message if logout successful\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Logged out\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Error message (if token invalid)\r",
-							"pm.test(\"API returns error message if token invalid\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"error\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Unauthenticated\");\r",
-							"    }\r",
-							"});\r",
-							""
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a0c7514d0cf2.60759082",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/logout",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"logout"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "forgot",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 for success, 422 for validation error)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 404]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (if email sent)\r",
-							"pm.test(\"API returns success message if email sent\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Password reset link has been sent to your email.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Validation error message (if email invalid or missing)\r",
-							"pm.test(\"API returns validation error if input invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\");\r",
-							"        pm.expect(jsonData.errors).to.have.property(\"email\");\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"ahmadali40189@gmail.com\"\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"publicdd channel nah\",\r\n  \"type\": \"public\",\r\n  \"company_id\": 79\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/api/channels/9\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"9\n"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/forgot-password",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"forgot-password"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "reset",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 for success, 422 for validation error)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 400]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (if password reset successful)\r",
-							"pm.test(\"API returns success message if password reset successful\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Password has been reset successfully.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Validation error message (if input invalid)\r",
-							"pm.test(\"API returns validation error if input invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\");\r",
-							"\r",
-							"        // Optional: Check for specific fields\r",
-							"        let errorFields = [\"email\", \"token\", \"password\", \"password_confirmation\"];\r",
-							"        errorFields.forEach(function(field){\r",
-							"            if(jsonData.errors[field]){\r",
-							"                pm.expect(jsonData.errors[field]).to.be.an(\"array\");\r",
-							"            }\r",
-							"        });\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"email\": \"ahmadali40189@gmail.com\",\r\n  \"token\": \"rJ8QyFTE5DwoiHGUKZmEB7aRINAXhWw5Fv6pQ39NfF3yk8kSCXJSMtDV1S3l\",\r\n  \"password\": \"Rn@00113\",\r\n  \"password_confirmation\": \"Rn@00113\"\r\n}\r\n",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/reset-password",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"reset-password"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "invite",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 success, 422 validation error, 401 unauthorized)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 422, 400,401]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (if invite sent)\r",
-							"pm.test(\"API returns success message if invite sent\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invitation sent\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Validation error (if email missing/invalid)\r",
-							"pm.test(\"API returns validation error if input invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\");\r",
-							"        pm.expect(jsonData.errors).to.have.property(\"email\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 4: Unauthorized error (if token missing/invalid)\r",
-							"pm.test(\"API returns error if token invalid or missing\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        // Laravel default unauthorized response\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Unauthorized\");\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a0c9668691a1.04780797",
-						"type": "text",
-						"disabled": true
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"email\":\"rni755x755@gmail.com\"\r\n    \r\n     \r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"response": []
 				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/company/invite",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"company",
-						"invite"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "get company",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 success, 401 unauthorized)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 401]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success response (if token valid)\r",
-							"pm.test(\"API returns company data if token valid\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"company\"); // company key hai\r",
-							"        pm.expect(jsonData.company).to.be.an(\"object\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Unauthorized response (if token missing/invalid)\r",
-							"pm.test(\"API returns error if token invalid or missing\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token\");\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "removeChannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// ✅ Status code test\r",
+									"pm.test(\"Status code is 200 or 404 ,401\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 404,401]);\r",
+									"});\r",
+									"\r",
+									"// ✅ Body must contain message field\r",
+									"pm.test(\"Body contains message field\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"// ✅ Success case\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Channel deleted successfully\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.include(\"deleted successfully\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// ✅ Not found case\r",
+									"if (pm.response.code === 404) {\r",
+									"    pm.test(\"Channel not found handled properly\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.include(\"not found\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/company/data",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
 					],
-					"port": "8000",
-					"path": [
-						"api",
-						"company",
-						"data"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "remove",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (200 success, 422 validation error, 401 unauthorized)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([200, 422, 401,404]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message (employee removed successfully)\r",
-							"pm.test(\"API returns success message if employee removed\", function () {\r",
-							"    if(pm.response.code === 200){\r",
-							"        pm.expect(jsonData).to.have.property(\"status\", \"success\");\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Employee removed\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 3: Validation error (if employee_id missing/invalid)\r",
-							"pm.test(\"API returns validation error if employee_id invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\");\r",
-							"        pm.expect(jsonData.errors).to.have.property(\"employee_id\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 4: Unauthorized (if token missing/invalid)\r",
-							"pm.test(\"API returns error if token invalid or missing\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token\");\r",
-							"    }\r",
-							"});\r",
-							""
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830r",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a0c9668691a1.04780797s",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"employee_id\": 32\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+						"url": {
+							"raw": "http://localhost:8000/api/channels/11\n",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"11\n"
+							]
 						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/company/employee",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"company",
-						"employee"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "createChannel",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse the JSON response\r",
-							"let jsonData = pm.response.json();\r",
-							"\r",
-							"// ✅ Test 1: Status code (201 success, 422 validation error, 401 unauthorized)\r",
-							"pm.test(\"Status code is correct\", function () {\r",
-							"    pm.expect([201, 422, 401]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 2: Success message and channel data (if channel created)\r",
-							"pm.test(\"API returns success message and channel data\", function () {\r",
-							"    if(pm.response.code === 201){\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Channel created successfully\");\r",
-							"        pm.expect(jsonData).to.have.property(\"data\"); // channel data\r",
-							"        pm.expect(jsonData.data).to.be.an(\"object\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"id\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"name\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"type\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"company_id\");\r",
-							"    }\r",
-							"});\r",
-							"// ✅ Test 3: Validation error (if fields missing/invalid)\r",
-							"pm.test(\"API returns validation error if input invalid\", function () {\r",
-							"    if(pm.response.code === 422){\r",
-							"        pm.expect(jsonData).to.have.property(\"errors\");\r",
-							"        [\"name\",\"type\",\"company_id\"].forEach(function(field){\r",
-							"            if(jsonData.errors[field]){\r",
-							"                pm.expect(jsonData.errors[field]).to.be.an(\"array\");\r",
-							"            }\r",
-							"        });\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Test 4: Unauthorized (if token missing/invalid)\r",
-							"pm.test(\"API returns error if token invalid or missing\", function () {\r",
-							"    if(pm.response.code === 401){\r",
-							"        pm.expect(jsonData).to.have.property(\"message\").that.includes(\"Invalid token.\");\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830",
-						"type": "text"
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n  \"name\": \"publicffff channel Pf Force\",\r\n  \"type\": \"public\",\r\n  \"company_id\": 79\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"response": []
 				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "updateChannel",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// ✅ Status code test\r",
-							"pm.test(\"Response received\", function () {\r",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 401, 403]);\r",
-							"});\r",
-							"\r",
-							"// ✅ Body must contain message field\r",
-							"pm.test(\"Body has message field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property(\"message\");\r",
-							"});\r",
-							"\r",
-							"// ✅ Success case\r",
-							"if (pm.response.code === 200) {\r",
-							"    pm.test(\"Channel updated successfully\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.eql(\"Channel updated successfully\");\r",
-							"    });\r",
-							"}\r",
-							"\r",
-							"// ✅ Unauthorized/Error case\r",
-							"if (pm.response.code === 401 || pm.response.code === 403) {\r",
-							"    pm.test(\"Unauthorized access handled properly\", function () {\r",
-							"        pm.expect(pm.response.json()).to.have.property(\"message\");\r",
-							"    });\r",
-							"}\r",
-							""
+					"name": "getChannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"\r",
+									"// Status check (200 or 401 dono allow karo)\r",
+									"pm.test(\"Response is either 200 or 401 Unauthorized\", function () {\r",
+									"    pm.expect([200, 401]).to.include(pm.response.code);\r",
+									"});\r",
+									"\r",
+									"// Agar 200 hai to data check karo\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"Response has data array\", function () {\r",
+									"        pm.expect(jsonData).to.have.property(\"data\");\r",
+									"        pm.expect(jsonData.data).to.be.an(\"array\");\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Every channel has creator\", function () {\r",
+									"        jsonData.data.forEach(function(channel) {\r",
+									"            pm.expect(channel).to.have.property(\"creator\");\r",
+									"            pm.expect(channel.creator).to.have.property(\"id\");\r",
+									"            pm.expect(channel.creator).to.have.property(\"first_name\");\r",
+									"            pm.expect(channel.creator).to.have.property(\"last_name\");\r",
+									"        });\r",
+									"    });\r",
+									"\r",
+									"    pm.test(\"Private channels include members\", function () {\r",
+									"        jsonData.data.forEach(function(channel) {\r",
+									"            if(channel.type === \"private\") {\r",
+									"                pm.expect(channel).to.have.property(\"members\");\r",
+									"                pm.expect(channel.members).to.be.an(\"array\");\r",
+									"            }\r",
+									"        });\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// Agar 401 hai to error message check karo\r",
+									"// ✅ Unauthorized request (no token OR invalid token)\r",
+									"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"\r",
+									"    const msg = pm.response.json().message;\r",
+									"\r",
+									"    pm.expect([\r",
+									"        \"Unauthorized.\",\r",
+									"        \"Invalid token.\",\r",
+									"        \"Unauthenticated.\"\r",
+									"    ]).to.include(msg);\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830d",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "PATCH",
-				"header": [
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels"
+							]
+						}
 					},
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"name\": \"publicdd channel nah\",\r\n  \"type\": \"public\",\r\n  \"company_id\": 79\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"response": []
 				},
-				"url": {
-					"raw": "http://localhost:8000/api/channels/9\n",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"9\n"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "removeChannel",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// ✅ Status code test\r",
-							"pm.test(\"Status code is 200 or 404 ,401\", function () {\r",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 404,401]);\r",
-							"});\r",
-							"\r",
-							"// ✅ Body must contain message field\r",
-							"pm.test(\"Body contains message field\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property(\"message\");\r",
-							"});\r",
-							"\r",
-							"// ✅ Success case\r",
-							"if (pm.response.code === 200) {\r",
-							"    pm.test(\"Channel deleted successfully\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.include(\"deleted successfully\");\r",
-							"    });\r",
-							"}\r",
-							"\r",
-							"// ✅ Not found case\r",
-							"if (pm.response.code === 404) {\r",
-							"    pm.test(\"Channel not found handled properly\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.include(\"not found\");\r",
-							"    });\r",
-							"}\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "DELETE",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830r",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://localhost:8000/api/channels/11\n",
-					"protocol": "http",
-					"host": [
-						"localhost"
+					"name": "addprivatemember",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// ✅ Always check status codes\r",
+									"pm.test(\"Status code is valid\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([200, 401, 404,400]);\r",
+									"});\r",
+									"\r",
+									"// ✅ Response must contain \"message\"\r",
+									"pm.test(\"Response has message\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property(\"message\");\r",
+									"});\r",
+									"\r",
+									"// ✅ Unauthorized case\r",
+									"// ✅ Unauthorized request (no token OR invalid token)\r",
+									"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"\r",
+									"    const msg = pm.response.json().message;\r",
+									"\r",
+									"    pm.expect([\r",
+									"        \"Unauthorized.\",\r",
+									"        \"Invalid token.\",\r",
+									"        \"Unauthenticated.\"\r",
+									"    ]).to.include(msg);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// ✅ User not found case\r",
+									"if (pm.response.code === 404 && pm.response.json().message.includes(\"User not found\")) {\r",
+									"    pm.test(\"User not found handled properly\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.include(\"User not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// ✅ Channel not found case\r",
+									"if (pm.response.code === 404 && pm.response.json().message.includes(\"Channel not found\")) {\r",
+									"    pm.test(\"Channel not found handled properly\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.include(\"Channel not found\");\r",
+									"    });\r",
+									"}\r",
+									"\r",
+									"// ✅ Success case\r",
+									"if (pm.response.code === 200) {\r",
+									"    pm.test(\"User added successfully\", function () {\r",
+									"        pm.expect(pm.response.json().message).to.include(\"User added successfully\");\r",
+									"    });\r",
+									"}\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"11\n"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getChannel",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"var jsonData = pm.response.json();\r",
-							"\r",
-							"// Status check (200 or 401 dono allow karo)\r",
-							"pm.test(\"Response is either 200 or 401 Unauthorized\", function () {\r",
-							"    pm.expect([200, 401]).to.include(pm.response.code);\r",
-							"});\r",
-							"\r",
-							"// Agar 200 hai to data check karo\r",
-							"if (pm.response.code === 200) {\r",
-							"    pm.test(\"Response has data array\", function () {\r",
-							"        pm.expect(jsonData).to.have.property(\"data\");\r",
-							"        pm.expect(jsonData.data).to.be.an(\"array\");\r",
-							"    });\r",
-							"\r",
-							"    pm.test(\"Every channel has creator\", function () {\r",
-							"        jsonData.data.forEach(function(channel) {\r",
-							"            pm.expect(channel).to.have.property(\"creator\");\r",
-							"            pm.expect(channel.creator).to.have.property(\"id\");\r",
-							"            pm.expect(channel.creator).to.have.property(\"first_name\");\r",
-							"            pm.expect(channel.creator).to.have.property(\"last_name\");\r",
-							"        });\r",
-							"    });\r",
-							"\r",
-							"    pm.test(\"Private channels include members\", function () {\r",
-							"        jsonData.data.forEach(function(channel) {\r",
-							"            if(channel.type === \"private\") {\r",
-							"                pm.expect(channel).to.have.property(\"members\");\r",
-							"                pm.expect(channel.members).to.be.an(\"array\");\r",
-							"            }\r",
-							"        });\r",
-							"    });\r",
-							"}\r",
-							"\r",
-							"// Agar 401 hai to error message check karo\r",
-							"// ✅ Unauthorized request (no token OR invalid token)\r",
-							"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
-							"    pm.expect(pm.response.code).to.eql(401);\r",
-							"\r",
-							"    const msg = pm.response.json().message;\r",
-							"\r",
-							"    pm.expect([\r",
-							"        \"Unauthorized.\",\r",
-							"        \"Invalid token.\",\r",
-							"        \"Unauthenticated.\"\r",
-							"    ]).to.include(msg);\r",
-							"});\r",
-							"\r",
-							""
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830df",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
 						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830d",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "addprivatemember",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// ✅ Always check status codes\r",
-							"pm.test(\"Status code is valid\", function () {\r",
-							"    pm.expect(pm.response.code).to.be.oneOf([200, 401, 404,400]);\r",
-							"});\r",
-							"\r",
-							"// ✅ Response must contain \"message\"\r",
-							"pm.test(\"Response has message\", function () {\r",
-							"    var jsonData = pm.response.json();\r",
-							"    pm.expect(jsonData).to.have.property(\"message\");\r",
-							"});\r",
-							"\r",
-							"// ✅ Unauthorized case\r",
-							"// ✅ Unauthorized request (no token OR invalid token)\r",
-							"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
-							"    pm.expect(pm.response.code).to.eql(401);\r",
-							"\r",
-							"    const msg = pm.response.json().message;\r",
-							"\r",
-							"    pm.expect([\r",
-							"        \"Unauthorized.\",\r",
-							"        \"Invalid token.\",\r",
-							"        \"Unauthenticated.\"\r",
-							"    ]).to.include(msg);\r",
-							"});\r",
-							"\r",
-							"\r",
-							"// ✅ User not found case\r",
-							"if (pm.response.code === 404 && pm.response.json().message.includes(\"User not found\")) {\r",
-							"    pm.test(\"User not found handled properly\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.include(\"User not found\");\r",
-							"    });\r",
-							"}\r",
-							"\r",
-							"// ✅ Channel not found case\r",
-							"if (pm.response.code === 404 && pm.response.json().message.includes(\"Channel not found\")) {\r",
-							"    pm.test(\"Channel not found handled properly\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.include(\"Channel not found\");\r",
-							"    });\r",
-							"}\r",
-							"\r",
-							"// ✅ Success case\r",
-							"if (pm.response.code === 200) {\r",
-							"    pm.test(\"User added successfully\", function () {\r",
-							"        pm.expect(pm.response.json().message).to.include(\"User added successfully\");\r",
-							"    });\r",
-							"}\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830df",
-						"type": "text"
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user_id\":102,\r\n    \"channel_id\":8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels/members",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"members"
+							]
+						}
 					},
-					{
-						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+					"response": []
+				},
+				{
+					"name": "getpublicchannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Check if Unauthorized without token\", function () {\r",
+									"    if (pm.response.code === 401) {\r",
+									"        pm.expect(pm.response.json().message).to.eql(\"Unauthorized.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Check if public channels list returned with valid token\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        let res = pm.response.json();\r",
+									"        pm.expect(res).to.have.property(\"data\");\r",
+									"        pm.expect(res.data).to.be.an(\"array\");\r",
+									"        \r",
+									"        if (res.data.length > 0) {\r",
+									"            pm.expect(res.data[0]).to.have.property(\"id\");\r",
+									"            pm.expect(res.data[0]).to.have.property(\"name\");\r",
+									"            pm.expect(res.data[0]).to.have.property(\"type\", \"public\");\r",
+									"            pm.expect(res.data[0]).to.have.property(\"company_id\");\r",
+									"            pm.expect(res.data[0]).to.have.property(\"created_by\");\r",
+									"            pm.expect(res.data[0]).to.have.property(\"creator\");\r",
+									"            pm.expect(res.data[0].creator).to.have.property(\"first_name\");\r",
+									"            pm.expect(res.data[0].creator).to.have.property(\"last_name\");\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels/public",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"public"
+							]
+						}
 					},
-					{
-						"key": "Accept",
-						"value": "application/json",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"user_id\":102,\r\n    \"channel_id\":8\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"response": []
 				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels/members",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"members"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "getpublicchannel",
-			"event": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"Check if Unauthorized without token\", function () {\r",
-							"    if (pm.response.code === 401) {\r",
-							"        pm.expect(pm.response.json().message).to.eql(\"Unauthorized.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"pm.test(\"Check if public channels list returned with valid token\", function () {\r",
-							"    if (pm.response.code === 200) {\r",
-							"        let res = pm.response.json();\r",
-							"        pm.expect(res).to.have.property(\"data\");\r",
-							"        pm.expect(res.data).to.be.an(\"array\");\r",
-							"        \r",
-							"        if (res.data.length > 0) {\r",
-							"            pm.expect(res.data[0]).to.have.property(\"id\");\r",
-							"            pm.expect(res.data[0]).to.have.property(\"name\");\r",
-							"            pm.expect(res.data[0]).to.have.property(\"type\", \"public\");\r",
-							"            pm.expect(res.data[0]).to.have.property(\"company_id\");\r",
-							"            pm.expect(res.data[0]).to.have.property(\"created_by\");\r",
-							"            pm.expect(res.data[0]).to.have.property(\"creator\");\r",
-							"            pm.expect(res.data[0].creator).to.have.property(\"first_name\");\r",
-							"            pm.expect(res.data[0].creator).to.have.property(\"last_name\");\r",
-							"        }\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels/public",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"public"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "privatechannel",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Check authorized request\r",
-							"pm.test(\"Status code is 200 for authorized\", function () {\r",
-							"    if (pm.response.code === 200) {\r",
-							"        pm.response.to.have.status(200);\r",
-							"    } else {\r",
-							"        console.log(\"Expected 200 but got:\", pm.response.code);\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// Check unauthorized request\r",
-							"// ✅ Unauthorized request (no token OR invalid token)\r",
-							"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
-							"    pm.expect(pm.response.code).to.eql(401);\r",
-							"\r",
-							"    const msg = pm.response.json().message;\r",
-							"\r",
-							"    pm.expect([\r",
-							"        \"Unauthorized.\",\r",
-							"        \"Invalid token.\",\r",
-							"        \"Unauthenticated.\"\r",
-							"    ]).to.include(msg);\r",
-							"});\r",
-							"\r",
-							"\r",
-							"// Verify private channel has members (only if authorized)\r",
-							"pm.test(\"Private channels response has members\", function () {\r",
-							"    if (pm.response.code === 200) {\r",
-							"        const jsonData = pm.response.json();\r",
-							"        pm.expect(jsonData.data).to.be.an(\"array\").that.is.not.empty;\r",
-							"        pm.expect(jsonData.data[0]).to.have.property(\"members\");\r",
-							"        pm.expect(jsonData.data[0].members.length).to.be.above(0);\r",
-							"    } else {\r",
-							"        console.log(\"Skipping members check because status:\", pm.response.code);\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830r",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels/private",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
-					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"private"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "sendmessage",
-			"event": [
-				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// ✅ Unauthorized request (no token OR invalid token)\r",
-							"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
-							"    pm.expect(pm.response.code).to.eql(401);\r",
-							"\r",
-							"    const msg = pm.response.json().message;\r",
-							"\r",
-							"    pm.expect([\r",
-							"        \"Unauthorized.\",\r",
-							"        \"Invalid token.\",\r",
-							"        \"Unauthenticated.\"\r",
-							"    ]).to.include(msg);\r",
-							"});\r",
-							"\r",
-							"\r",
-							"\r",
-							"// ✅ 2. Channel not found\r",
-							"pm.test(\"Channel not found error\", function () {\r",
-							"    if (pm.response.code === 404) {\r",
-							"        const jsonData = pm.response.json();\r",
-							"        pm.expect(jsonData).to.have.property(\"message\", \"Channel not found\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ 3. Message sent successfully\r",
-							"pm.test(\"Message sent successfully\", function () {\r",
-							"    if (pm.response.code === 200) {\r",
-							"        const jsonData = pm.response.json();\r",
-							"        pm.expect(jsonData).to.have.property(\"message\", \"Message sent successfully\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"channel_id\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"user_id\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"content\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"id\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"user\");\r",
-							"        pm.expect(jsonData.data.user).to.have.property(\"id\");\r",
-							"        pm.expect(jsonData.data.user).to.have.property(\"first_name\");\r",
-							"        pm.expect(jsonData.data.user).to.have.property(\"last_name\");\r",
-							"        pm.expect(jsonData.data.user).to.have.property(\"email\");\r",
-							"        pm.expect(jsonData.data.attachments).to.be.an(\"array\"); \r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830i",
-						"type": "text"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"content\":\"private message ahmad\",\r\n    \"channel_id\":8\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
+					"name": "privatechannel",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Check authorized request\r",
+									"pm.test(\"Status code is 200 for authorized\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        pm.response.to.have.status(200);\r",
+									"    } else {\r",
+									"        console.log(\"Expected 200 but got:\", pm.response.code);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// Check unauthorized request\r",
+									"// ✅ Unauthorized request (no token OR invalid token)\r",
+									"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"\r",
+									"    const msg = pm.response.json().message;\r",
+									"\r",
+									"    pm.expect([\r",
+									"        \"Unauthorized.\",\r",
+									"        \"Invalid token.\",\r",
+									"        \"Unauthenticated.\"\r",
+									"    ]).to.include(msg);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"// Verify private channel has members (only if authorized)\r",
+									"pm.test(\"Private channels response has members\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData.data).to.be.an(\"array\").that.is.not.empty;\r",
+									"        pm.expect(jsonData.data[0]).to.have.property(\"members\");\r",
+									"        pm.expect(jsonData.data[0].members.length).to.be.above(0);\r",
+									"    } else {\r",
+									"        console.log(\"Skipping members check because status:\", pm.response.code);\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
 						}
-					}
-				},
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels/messages",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
 					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"messages"
-					]
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830r",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels/private",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"private"
+							]
+						}
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		},
 		{
-			"name": "getmessage",
-			"event": [
+			"name": "message",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"// Parse response\r",
-							"let jsonData;\r",
-							"try {\r",
-							"    jsonData = pm.response.json();\r",
-							"} catch (e) {\r",
-							"    jsonData = {};\r",
-							"}\r",
-							"\r",
-							"// ✅ Unauthorized without token\r",
-							"pm.test(\"Unauthorized without token\", function () {\r",
-							"    if (pm.response.code === 401 && jsonData.message === \"Unauthorized.\") {\r",
-							"        pm.expect(jsonData.message).to.eql(\"Unauthorized.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Invalid token\r",
-							"pm.test(\"Invalid token response\", function () {\r",
-							"    if (pm.response.code === 401 && jsonData.message === \"Invalid token.\") {\r",
-							"        pm.expect(jsonData.message).to.eql(\"Invalid token.\");\r",
-							"    }\r",
-							"});\r",
-							"\r",
-							"// ✅ Success response with messages\r",
-							"pm.test(\"Messages fetched successfully\", function () {\r",
-							"    if (pm.response.code === 200) {\r",
-							"        pm.expect(jsonData).to.have.property(\"data\");\r",
-							"        pm.expect(jsonData.data).to.have.property(\"data\"); // paginated list\r",
-							"        pm.expect(jsonData.data.data).to.be.an(\"array\");\r",
-							"\r",
-							"        // Check at least one message exists\r",
-							"        if (jsonData.data.data.length > 0) {\r",
-							"            let msg = jsonData.data.data[0];\r",
-							"            pm.expect(msg).to.have.property(\"id\");\r",
-							"            pm.expect(msg).to.have.property(\"channel_id\");\r",
-							"            pm.expect(msg).to.have.property(\"user_id\");\r",
-							"            pm.expect(msg).to.have.property(\"content\");\r",
-							"            pm.expect(msg).to.have.property(\"user\");\r",
-							"            pm.expect(msg.user).to.have.property(\"id\");\r",
-							"            pm.expect(msg.user).to.have.property(\"first_name\");\r",
-							"            pm.expect(msg.user).to.have.property(\"last_name\");\r",
-							"            pm.expect(msg.user).to.have.property(\"email\");\r",
-							"            pm.expect(msg.attachments).to.be.an(\"array\");\r",
-							"        }\r",
-							"    }\r",
-							"});\r",
-							""
-						],
-						"type": "text/javascript",
-						"packages": {}
-					}
-				}
-			],
-			"request": {
-				"method": "GET",
-				"header": [
-					{
-						"key": "Authorization",
-						"value": "tok_68a1ac91cd15c0.82488830",
-						"type": "text"
-					}
-				],
-				"url": {
-					"raw": "http://127.0.0.1:8000/api/channels/8/messages",
-					"protocol": "http",
-					"host": [
-						"127",
-						"0",
-						"0",
-						"1"
+					"name": "sendmessage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// ✅ Unauthorized request (no token OR invalid token)\r",
+									"pm.test(\"Unauthorized or Invalid token returns 401\", function () {\r",
+									"    pm.expect(pm.response.code).to.eql(401);\r",
+									"\r",
+									"    const msg = pm.response.json().message;\r",
+									"\r",
+									"    pm.expect([\r",
+									"        \"Unauthorized.\",\r",
+									"        \"Invalid token.\",\r",
+									"        \"Unauthenticated.\"\r",
+									"    ]).to.include(msg);\r",
+									"});\r",
+									"\r",
+									"\r",
+									"\r",
+									"// ✅ 2. Channel not found\r",
+									"pm.test(\"Channel not found error\", function () {\r",
+									"    if (pm.response.code === 404) {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property(\"message\", \"Channel not found\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ 3. Message sent successfully\r",
+									"pm.test(\"Message sent successfully\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        const jsonData = pm.response.json();\r",
+									"        pm.expect(jsonData).to.have.property(\"message\", \"Message sent successfully\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"channel_id\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"user_id\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"content\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"id\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"user\");\r",
+									"        pm.expect(jsonData.data.user).to.have.property(\"id\");\r",
+									"        pm.expect(jsonData.data.user).to.have.property(\"first_name\");\r",
+									"        pm.expect(jsonData.data.user).to.have.property(\"last_name\");\r",
+									"        pm.expect(jsonData.data.user).to.have.property(\"email\");\r",
+									"        pm.expect(jsonData.data.attachments).to.be.an(\"array\"); \r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"port": "8000",
-					"path": [
-						"api",
-						"channels",
-						"8",
-						"messages"
-					]
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830i",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"content\":\"private message ahmad\",\r\n    \"channel_id\":8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels/messages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getmessage",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse response\r",
+									"let jsonData;\r",
+									"try {\r",
+									"    jsonData = pm.response.json();\r",
+									"} catch (e) {\r",
+									"    jsonData = {};\r",
+									"}\r",
+									"\r",
+									"// ✅ Unauthorized without token\r",
+									"pm.test(\"Unauthorized without token\", function () {\r",
+									"    if (pm.response.code === 401 && jsonData.message === \"Unauthorized.\") {\r",
+									"        pm.expect(jsonData.message).to.eql(\"Unauthorized.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Invalid token\r",
+									"pm.test(\"Invalid token response\", function () {\r",
+									"    if (pm.response.code === 401 && jsonData.message === \"Invalid token.\") {\r",
+									"        pm.expect(jsonData.message).to.eql(\"Invalid token.\");\r",
+									"    }\r",
+									"});\r",
+									"\r",
+									"// ✅ Success response with messages\r",
+									"pm.test(\"Messages fetched successfully\", function () {\r",
+									"    if (pm.response.code === 200) {\r",
+									"        pm.expect(jsonData).to.have.property(\"data\");\r",
+									"        pm.expect(jsonData.data).to.have.property(\"data\"); // paginated list\r",
+									"        pm.expect(jsonData.data.data).to.be.an(\"array\");\r",
+									"\r",
+									"        // Check at least one message exists\r",
+									"        if (jsonData.data.data.length > 0) {\r",
+									"            let msg = jsonData.data.data[0];\r",
+									"            pm.expect(msg).to.have.property(\"id\");\r",
+									"            pm.expect(msg).to.have.property(\"channel_id\");\r",
+									"            pm.expect(msg).to.have.property(\"user_id\");\r",
+									"            pm.expect(msg).to.have.property(\"content\");\r",
+									"            pm.expect(msg).to.have.property(\"user\");\r",
+									"            pm.expect(msg.user).to.have.property(\"id\");\r",
+									"            pm.expect(msg.user).to.have.property(\"first_name\");\r",
+									"            pm.expect(msg.user).to.have.property(\"last_name\");\r",
+									"            pm.expect(msg.user).to.have.property(\"email\");\r",
+									"            pm.expect(msg.attachments).to.be.an(\"array\");\r",
+									"        }\r",
+									"    }\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "tok_68a1ac91cd15c0.82488830",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/channels/8/messages",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"channels",
+								"8",
+								"messages"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "removeMessage",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
 				}
-			},
-			"response": []
+			]
 		}
 	]
 }
